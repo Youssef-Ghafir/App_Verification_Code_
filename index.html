@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            background: radial-gradient(circle, rgba(0,234,153,1) 42%, rgba(0,234,125,1) 100%);
+        }
+        .box {
+            width: 450px;
+            max-width: 100%;
+        }
+        .box .title {
+            margin-bottom: 1rem;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        .box p {
+            margin-bottom: 1.5rem;
+            color: #fff;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+        .box .inputs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .box .inputs input {
+            width: 40px;
+            background-color: rgb(255 255 255 / 40%);
+            transition: .3s ease-in-out;
+            font-size: 45px;
+            text-align: center;
+            color: #fff;
+            border: transparent;
+            outline: transparent;
+            border-radius: 8px;
+            height: 80px;
+        }
+        .box .inputs input.active {
+            border: 1px solid #fff;
+            background-color: transparent;
+        }
+        .cr {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            color: #fff;
+        }
+        .cr a {
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1 class="title">Verfication Code</h1>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.<br> Vitae laboriosam optio vel praesentium ea sint nihil.</p>
+        <div class="inputs">
+            <input type="text" name="" id="" maxlength="1" >
+            <input type="text" name="" id="" maxlength="1" >
+            <input type="text" name="" id="" maxlength="1" >
+            <input type="text" name="" id="" maxlength="1" >
+            <input type="text" name="" id="" maxlength="1" >
+            <input type="text" name="" id="" maxlength="1" >
+        </div>
+        <input type="text" id="paste" maxlength="6" style="position: absolute; left: -1000px;">
+    </div>
+    <p class="cr">Created By <a href="https://web.facebook.com/profile.php?id=100015688488421" target="_blank"><b>YG</b></a></p>
+    <script >
+let inputs = document.querySelectorAll('.inputs > input');
+let inp_paste = document.getElementById('paste');
+inputs[0].removeAttribute('disabled')
+inputs[0].focus();
+inputs[0].classList.add('active')
+inputs.forEach((e,i) => {
+    e.oninput = _ => {
+        if(!isNaN(parseInt(e.value))) {
+            if(e.nextElementSibling) {
+                e.nextElementSibling.focus()
+                e.nextElementSibling.classList.add('active')
+                e.setAttribute('disabled','')
+                e.classList.remove('active')
+            }
+        }else {
+            e.value = '';
+        }
+    }
+
+    e.onpaste = (paste) => {
+        inp_paste.focus();
+        setTimeout(() => {
+        if(!isNaN(parseInt(inp_paste.value)) && inp_paste.value.length == inputs.length) {
+            let value_inp = inp_paste.value.split('')
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].value = value_inp[i]
+                if (i != inputs.length - 1) {
+                    inputs[i].setAttribute('disabled','')
+                    inputs[i].classList.remove('active')
+                }else {
+                    inputs[i].classList.add('active')
+                }  
+            }
+            inp_paste.value = '';
+        }
+        }, 100);
+    }
+})
+inputs.forEach((elem,i) => {
+    elem.onkeydown = e => {
+        if(e.key == 'Backspace') {
+            e.preventDefault();
+            if(elem.previousElementSibling) {
+                elem.value = '';
+                elem.previousElementSibling.classList.add('active');
+                elem.previousElementSibling.removeAttribute('disabled')
+                elem.previousElementSibling.focus();
+            }else {
+                elem.value = '';
+            }
+        }
+    }
+})
+    </script>
+</body>
+</html>
